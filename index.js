@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import router from "./router.js";
 
 const PORT = 5000;
 const DB_URL =
@@ -8,15 +9,14 @@ const DB_URL =
 const app = express();
 
 app.use(express.json());
-
-app.post("/", (req, res) => {
-  console.log(req.body);
-  res.status(200).json("hello server");
-});
+app.use("/api", router);
 
 async function startApp() {
   try {
-    await mongoose.connect(DB_URL);
+    await mongoose.connect(DB_URL, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    });
     app.listen(PORT, () => console.log(PORT, "hello"));
   } catch (e) {
     console.log(e);
